@@ -1,4 +1,4 @@
-var db = require("./models");
+var db = require("../models");
 var mongoose = require("mongoose");
 
 var axios = require("axios");
@@ -13,5 +13,7 @@ module.exports = function (app) {
         // axios.get(url).then(function(response){
         //     var $ = cheerio.load(response.data);
         // })
+
+        res.send("Yay");
     })
 }
