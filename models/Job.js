@@ -9,11 +9,16 @@ var JobSchema = new Schema({
         type: String,
         required: true
     },
-    description: {
+    company: {
         type: String,
         required: true
     },
     link: {
+        type: String,
+        unique: true,
+        required: true
+    },
+    location: {
         type: String,
         required: true
     },
