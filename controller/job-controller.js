@@ -14,7 +14,7 @@ module.exports = function (app) {
                 Jobs: dbJob
             }
             res.render("home", hbsObj);
-        }).catch(function(err){
+        }).catch(function (err) {
             res.json(err);
         });
     });
@@ -25,17 +25,38 @@ module.exports = function (app) {
                 Jobs: dbSavedJob
             }
             res.render("home", hbsObj);
-        }).catch(function(err){
+        }).catch(function (err) {
             res.json(err);
         });
     });
 
 
-    app.get("/saved/:id", function(req,res){
-        res.send("Working on this too");
+    //Save funtion is not working.
+    app.post("/", function (req, res) {
+        console.log(req.body.id)
+
+        db.Job.findOne({ _id: req.body.id }, function (err, found) {
+            console.log(found)
+            found.saved = true;
+            console.log(found)
+            var jobObj = [];
+            jobObj.push(found);
+            console.log(jobObj);
+            return jobObj;
+        }).then(function (jobObj) {
+            db.SavedJob.create(jobObj).then(function (dbSavedJob) {
+                console.log(dbSavedJob);
+            })
+
+        })
+
+
+
+        res.json(req.body.id + " saved.");
+
     })
 
-    app.post("/saved/:id", function(req,res){
+    app.post("/saved/:id", function (req, res) {
         res.send("Working on notes");
     })
 
@@ -46,11 +67,14 @@ module.exports = function (app) {
 
         axios.get(url).then(function (response) {
             var $ = cheerio.load(response.data);
-            var count = 0;
+            ;
             var numbResults = $("article.advance-search-job").length;
+            //Subtracting 1 from number of results, because i starts at index of 0 for result.
+
+            var resultArr = []
 
             $("article.advance-search-job").each(function (i, element) {
-              
+
                 var title = $(this).find("a.job_title").text();
                 var link = $(this).find("a.job_title").attr("href");
                 var company = $(this).find("i.fa.fa-building").next().text();
@@ -63,22 +87,36 @@ module.exports = function (app) {
                 result.company = company;
                 result.location = location;
 
-                db.Job.create(result).then(function(dbJob){
+                resultArr.push(result);
+
+
+
+            });
+
+            var counter = 0;
+            for (var j = 0; j < resultArr.length; j++) {
+                db.Job.create(resultArr[j]).then(function (dbJob) {
                     // console.log(dbJob);
-                    count++;
-                }).catch(function(err){
-                    return res.json(err);
+                    counter++;
+
+                    // console.log("numbResults: " + numbResults);
+                    console.log("count: " + counter)
+                    console.log("final count: " + counter);
+                    ;
+
+                }).catch(function (err) {
+                    // return res.json(err);
                 })
-
-                //Subtracting 1 from number of results, because i starts at index of 0 for result.
-                if(i == (numbResults - 1)){
-                    // console.log(count);
-                    res.send("Scrape Complete: " + count);    
-                }
-            })
-
+                // .then(function(){
+                //     console.log("before res.json " + counter)
+                //     res.json(counter);
+                // })
+            }
+            res.json(counter);
         });
+
     });
+
 
 
 }
