@@ -1,0 +1,34 @@
+<div class="jumbotron bg-transparent text-center">
+    <div class="d-block">
+
+        <h1 class="display-4 text-white-shadow align-middle">
+            Looking for a job too?
+        </h1>
+
+    </div>
+    <hr class="my-4">
+    <h3 class="text-white">Well here's a list! Lets see what we got.</h3>
+    <form class="create-form">
+        <div class="form-group">
+            <a class="btn btn-primary" href="/" role="button">Home</a>
+            <a class="btn btn-primary" href="/saved" role="button">Saved Jobs</a>
+            <button class="btn btn-primary" type="submit">Scrape Job Listing</button>
+        </div>
+    </form>
+</div>
+
+
+<div class="container">
+    <div class="card card-body">
+        <h3>Job Listing</h3>
+        <hr>
+        {{#unless Jobs}}
+            <div class="card card-body">
+                <h3>Sorry nothing listed try scraping or saving.</h3>
+            </div>
+        {{/unless}}
+        {{#each Jobs}}
+            {{> Query/query-block}}
+        {{/each}}
+    </div>
+</div>

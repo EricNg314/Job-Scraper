@@ -4,7 +4,7 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 //Creating a NoteSchema using constructor.
-var JobSchema = new Schema({
+var SavedJobSchema = new Schema({
     title: {
         type: String,
         required: true
@@ -21,10 +21,10 @@ var JobSchema = new Schema({
     location: {
         type: String,
         required: true
-    },
+    },    
     saved: {
         type: Boolean,
-        default: false
+        default: true
     },
     note: {
         type: Schema.Types.ObjectId,
@@ -33,6 +33,6 @@ var JobSchema = new Schema({
 
 });
 
-var Job = mongoose.model("Job", JobSchema);
+var SavedJob = mongoose.model("SavedJob", SavedJobSchema);
 
-module.exports = Job;
+module.exports = SavedJob;

@@ -1,0 +1,24 @@
+<div class="card card-body">
+
+    <div class="row">
+        <div class="col-12">
+            <a class="border-bottom" href="{{link}}">
+                {{title}}
+            </a>
+            <div class="float-right">
+                {{#if saved}}
+                <button id="addNote" class="btn btn-primary mx-1" type="submit" data-id="{{_id}}">Add Note</button>
+                <button id="deleteJob" class="btn btn-primary mx-1" type="submit" data-id="{{_id}}">Delete Job</button>
+
+                {{else}}
+                <button id="saveJob" class="btn btn-primary  mx-1" type="submit" data-id="{{_id}}">Save Job</button>
+                {{/if}}
+
+            </div>
+        </div>
+
+        <div class="col-12">
+            <span>{{company}}, {{location}}</span>
+        </div>
+    </div>
+</div>
