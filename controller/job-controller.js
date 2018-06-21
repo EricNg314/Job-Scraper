@@ -13,6 +13,7 @@ module.exports = function (app) {
             var hbsObj = {
                 Jobs: dbJob
             }
+            console.log(dbJob);
             res.render("home", hbsObj);
         }).catch(function (err) {
             res.json(err);
@@ -30,36 +31,76 @@ module.exports = function (app) {
         });
     });
 
-
     //Save funtion is not working.
     app.post("/", function (req, res) {
         console.log(req.body.id)
 
         db.Job.findOne({ _id: req.body.id }, function (err, found) {
-            console.log(found)
-            found.saved = true;
-            console.log(found)
-            var jobObj = [];
-            jobObj.push(found);
+            var jobObj = {
+                saved: true,
+                title: found.title,
+                link: found.link,
+                company: found.company,
+                location: found.location
+            };
             console.log(jobObj);
-            return jobObj;
-        }).then(function (jobObj) {
+
             db.SavedJob.create(jobObj).then(function (dbSavedJob) {
-                console.log(dbSavedJob);
+                // console.log(dbSavedJob);
+
+            }).catch(function (err) {
+                return res.json(err);
             })
 
+        }).catch(function (err) {
+            return res.json(err);
         })
-
-
-
         res.json(req.body.id + " saved.");
+    })
+
+    //Opening Add Note button.
+    app.get("/saved/:id", function (req, res) {
+
+        db.SavedJob.findOne({ _id: req.params.id })
+            .populate("note")
+            .then(function (dbSavedJob) {
+                // console.log(dbSavedJob);
+                res.json(dbSavedJob);
+            })
+            .catch(function (err) {
+                res.json(err);
+            })
 
     })
 
+    //Posting note to saved jobs
     app.post("/saved/:id", function (req, res) {
-        res.send("Working on notes");
+        console.log(req.body);
+        db.Note.create(req.body.note)
+            .then(function (dbNote) {
+                return db.SavedJob.findOneAndUpdate({
+                    _id: req.params.id
+                }, {
+                        note: dbNote._id
+                    }, {
+                        new: true
+                    })
+            })
+            .then(function (dbSavedJob) {
+                res.json(dbSavedJob);
+            })
+            .catch(function (err) {
+                res.json(err);
+            });
+
+
+        // res.send("yay")
     })
 
+    //Deleting the saved job.
+    app.delete("/saved/:id", function (req,res){
+
+    })
 
 
     app.get("/scrape", function (req, res) {
@@ -89,30 +130,41 @@ module.exports = function (app) {
 
                 resultArr.push(result);
 
-
-
             });
 
-            var counter = 0;
-            for (var j = 0; j < resultArr.length; j++) {
-                db.Job.create(resultArr[j]).then(function (dbJob) {
-                    // console.log(dbJob);
-                    counter++;
+            let counter = 0;
+            for (let j = 0; j < resultArr.length; j++) {
+                if (j == (resultArr.length - 1)) {
 
-                    // console.log("numbResults: " + numbResults);
-                    console.log("count: " + counter)
-                    console.log("final count: " + counter);
-                    ;
+                    db.Job.create(resultArr[j]).then(function (dbJob) {
+                        // console.log(dbJob);
+                        counter++;
 
-                }).catch(function (err) {
-                    // return res.json(err);
-                })
-                // .then(function(){
-                //     console.log("before res.json " + counter)
-                //     res.json(counter);
-                // })
+                        console.log("count: " + counter)
+                        console.log("final count: " + j);
+
+                        // return res.send(counter);
+                        console.log("After res.json")
+
+                    }).catch(function (err) {
+                        console.log("After catch")
+                        return res.json(err);
+                    })
+
+                } else {
+                    db.Job.create(resultArr[j]).then(function (dbJob) {
+                        // console.log(dbJob);
+                        counter++;
+                        console.log("count: " + counter)
+
+                    }).catch(function (err) {
+                        return res.json(err);
+                    })
+                }
+
             }
-            res.json(counter);
+
+            res.json("complete");
         });
 
     });
