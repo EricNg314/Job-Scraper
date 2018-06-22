@@ -1,0 +1,18 @@
+.jumbotron {
+    background: rgba(0,0,0,.1);
+    color: white;
+}
+
+body {
+    width: 100%;
+    background: url("../images/background_magnifyingglass.jpg") no-repeat right fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover; 
+    background-size: cover;
+    overflow: visible;
+}
+
+.card {
+    opacity: .90;
+}

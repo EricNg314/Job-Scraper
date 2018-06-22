@@ -6,9 +6,6 @@ $(document).ready(function () {
         $.ajax("/scrape", {
             type: "GET"
         }).then(function (count) {
-            console.log("=======================")
-            console.log(count)
-            console.log("Number of results" + count);
             window.location.href = "/"
         });
     })
@@ -20,7 +17,6 @@ $(document).ready(function () {
             type: "DELETE"
         }).then(function (count) {
             
-
             // $("#modalDeleteAll").modal("show").then(function(){
                 window.location.href = "/"
             // });
@@ -44,7 +40,6 @@ $(document).ready(function () {
 
             if (check != undefined) {
                 if (check.indexOf("MongoError") != -1) {
-                    console.log("error");
                     $("#modalSavedText").text("Error, job may have been previously saved.")
                 } else {
                     $("#modalSavedText").text(response.title + " has been saved!")
@@ -73,8 +68,6 @@ $(document).ready(function () {
         $.ajax("/saved/" + $(this).attr("data-id"), {
             type: "GET"
         }).then(function (savedJob) {
-            console.log("=======================")
-            console.log(savedJob);
 
             $("#modalTitle").text(savedJob.title);
             if (savedJob.note !== undefined) {
@@ -94,12 +87,9 @@ $(document).ready(function () {
         $.ajax("/saved/" + $(this).attr("data-id"), {
             type: "DELETE"
         }).then(function (delResults) {
-            console.log("=======================")
-            console.log(delResults);
+
             location.reload();
-
         });
-
     })
 
 
@@ -117,11 +107,5 @@ $(document).ready(function () {
             console.log(result);
             $("#modalNote").modal("hide")
         })
-
-
-
     })
-
-
-
 });
