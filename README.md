@@ -7,7 +7,7 @@ A full stack application scraping a website for jobs and allowing users to revie
 
 ## Example of App :tv:
 
-![demo](/public/assets/img/test.gif)
+![demo](/public/assets/images/deployed_site_image.png)
 
 ## Getting Started :loudspeaker:
 This repo utilizes various packages from Node Package Manager(NPM).
