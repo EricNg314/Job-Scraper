@@ -4,7 +4,10 @@ var mongoose = require("mongoose");
 var axios = require("axios");
 var cheerio = require("cheerio");
 
-mongoose.connect("mongodb://localhost/jobCollector");
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/jobCollector";
+
+mongoose.Promise = Promise;
+mongoose.connect(MONGODB_URI);
 
 module.exports = function (app) {
 
