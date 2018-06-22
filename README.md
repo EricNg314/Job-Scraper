@@ -31,7 +31,7 @@ This repo utilizes various packages from Node Package Manager(NPM).
     node server.js
     ```
 
-3. Go to your browser and type enter http://localhost:3000/ into your address bar. (Or visit the live demo [here](https://radiant-everglades-91406.herokuapp.com/).)
+3. Go to your browser and enter http://localhost:3000/ into your address bar. (Or visit the live demo [here](https://radiant-everglades-91406.herokuapp.com/).)
 
     
 ## Built With :hammer:
