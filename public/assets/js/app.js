@@ -57,8 +57,8 @@ $(document).ready(function () {
     $(".addNote").on("click", function (event) {
         event.preventDefault();
 
-        $("#modalTitle").empty();
-        $("#modalNoteText").empty();
+        $("#modalTitle").text("");
+        $("#modalNoteText").text("");
         $("#btnSaveNote").attr("data-id", "");
 
         var jobID = { id: $(this).attr("data-id") };
