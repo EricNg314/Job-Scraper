@@ -7,11 +7,11 @@
             </a>
             <div class="float-right">
                 {{#if saved}}
-                <button id="addNote" class="btn btn-primary mx-1" type="submit" data-id="{{_id}}">Add Note</button>
-                <button id="deleteJob" class="btn btn-primary mx-1" type="submit" data-id="{{_id}}">Delete Job</button>
+                <button class="btn btn-primary mx-1 addNote" type="submit" data-id="{{_id}}">Add Note</button>
+                <button class="btn btn-primary mx-1 deleteJob" type="submit" data-id="{{_id}}">Delete Job</button>
 
                 {{else}}
-                <button id="saveJob" class="btn btn-primary  mx-1" type="submit" data-id="{{_id}}">Save Job</button>
+                <button class="btn btn-primary saveJob  mx-1" type="submit" data-id="{{_id}}">Save Job</button>
                 {{/if}}
 
             </div>

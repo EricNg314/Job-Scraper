@@ -13,7 +13,7 @@ module.exports = function (app) {
             var hbsObj = {
                 Jobs: dbJob
             }
-            console.log(dbJob);
+            // console.log(dbJob);
             res.render("home", hbsObj);
         }).catch(function (err) {
             res.json(err);
@@ -33,7 +33,7 @@ module.exports = function (app) {
 
     //Save funtion is not working.
     app.post("/", function (req, res) {
-        console.log(req.body.id)
+       //console.log(req.body.id)
 
         db.Job.findOne({ _id: req.body.id }, function (err, found) {
             var jobObj = {
@@ -64,8 +64,8 @@ module.exports = function (app) {
         db.SavedJob.findOne({ _id: req.params.id })
             .populate("note")
             .then(function (dbSavedJob) {
-                // console.log(dbSavedJob);
-                res.json(dbSavedJob);
+            console.log("dbSavedJob",dbSavedJob);
+               res.json(dbSavedJob);
             })
             .catch(function (err) {
                 res.json(err);
@@ -75,9 +75,10 @@ module.exports = function (app) {
 
     //Posting note to saved jobs
     app.post("/saved/:id", function (req, res) {
-        console.log(req.body);
-        db.Note.create(req.body.note)
+       console.log("id", req.params.id);
+        db.Note.create({body: req.body.body})
             .then(function (dbNote) {
+                console.log(dbNote)
                 return db.SavedJob.findOneAndUpdate({
                     _id: req.params.id
                 }, {
@@ -90,6 +91,7 @@ module.exports = function (app) {
                 res.json(dbSavedJob);
             })
             .catch(function (err) {
+                console.log(err);
                 res.json(err);
             });
 

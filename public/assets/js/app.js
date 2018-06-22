@@ -37,7 +37,7 @@ $(document).ready(function () {
     })
 
     
-    $("#addNote").on("click", function (event) {
+    $(".addNote").on("click", function (event) {
         event.preventDefault();
 
         $("#modalTitle").empty();
@@ -46,9 +46,9 @@ $(document).ready(function () {
 
         var jobID = { id: $(this).attr("data-id")};
 
-        console.log(jobID);
+        console.log("jobID", $(this).attr("data-id") );
 
-        $.ajax("/saved/" + jobID.id, {
+        $.ajax("/saved/"+$(this).attr("data-id"), {
             type: "GET"
         }).then(function (savedJob) {
             console.log("=======================")
@@ -67,13 +67,12 @@ $(document).ready(function () {
 
     $("#btnSaveNote").on("click", function(){
         var jobInfo = {
-            id: $(this).attr("data-id"),
-            note: $("#modalNoteText").val()
+            body: $("#modalNoteText").val()
         }
 
-        console.log(jobInfo.note);
+        console.log(jobInfo.body);
 
-        $.ajax("/saved/" + jobInfo.id, {
+        $.ajax("/saved/" + $(this).attr("data-id"), {
             type: "POST",
             data: jobInfo
         }).then(function(){
