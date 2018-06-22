@@ -54,3 +54,5 @@ This repo utilizes various packages from Node Package Manager(NPM).
 ## Authors :squirrel: 
 * **Eric Ng** [EricNg314](https://github.com/EricNg314)
 
+## Acknowledgments 
+* Hover animations are from Hover.css by Ian Lunn. [Click here](https://github.com/IanLunn/Hover)
