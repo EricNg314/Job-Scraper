@@ -9,34 +9,56 @@ $(document).ready(function () {
             console.log("=======================")
             console.log(count)
             console.log("Number of results" + count);
-            // window.location.href = "/"
+            window.location.href = "/"
         });
-
-
     })
 
-
-    $("#saveJob").on("click", function (event) {
+    $("#deleteList").on("click", function (event) {
         event.preventDefault();
 
-        var jobID = { id: $(this).attr("data-id")};
+        $.ajax("/", {
+            type: "DELETE"
+        }).then(function (count) {
+            
+
+            // $("#modalDeleteAll").modal("show").then(function(){
+                window.location.href = "/"
+            // });
+        });
+    })
+
+    //Saving job from home page
+    $(".saveJob").on("click", function (event) {
+        event.preventDefault();
+
+        var jobID = { id: $(this).attr("data-id") };
 
         console.log(jobID);
 
         $.ajax("/", {
             type: "POST",
             data: jobID
-        }).then(function (count) {
-            console.log("=======================")
-            console.log(count)
-            console.log("Number of results" + count);
-            // window.location.href = "/"
+        }).then(function (response) {
+
+            var check = response.name;
+
+            if (check != undefined) {
+                if (check.indexOf("MongoError") != -1) {
+                    console.log("error");
+                    $("#modalSavedText").text("Error, job may have been previously saved.")
+                } else {
+                    $("#modalSavedText").text(response.title + " has been saved!")
+                }
+            } else {
+                $("#modalSavedText").text(response.title + " has been saved!")
+            }
+
+            $("#modalSaved").modal("show");
         });
-
-
     })
 
-    
+
+    //Hitting the add note button.
     $(".addNote").on("click", function (event) {
         event.preventDefault();
 
@@ -44,28 +66,44 @@ $(document).ready(function () {
         $("#modalNoteText").empty();
         $("#btnSaveNote").attr("data-id", "");
 
-        var jobID = { id: $(this).attr("data-id")};
+        var jobID = { id: $(this).attr("data-id") };
 
-        console.log("jobID", $(this).attr("data-id") );
+        // console.log("jobID", $(this).attr("data-id") );
 
-        $.ajax("/saved/"+$(this).attr("data-id"), {
+        $.ajax("/saved/" + $(this).attr("data-id"), {
             type: "GET"
         }).then(function (savedJob) {
             console.log("=======================")
             console.log(savedJob);
 
-
             $("#modalTitle").text(savedJob.title);
-            $("#modalNoteText").text(savedJob.note);
+            if (savedJob.note !== undefined) {
+                $("#modalNoteText").text(savedJob.note.body);
+            }
             $("#btnSaveNote").attr("data-id", savedJob._id);
             $("#modalNote").modal("show");
 
         });
+    })
 
+    //Deleting from saved jobs
+    $(".deleteJob").on("click", function (event) {
+        event.preventDefault();
+
+
+        $.ajax("/saved/" + $(this).attr("data-id"), {
+            type: "DELETE"
+        }).then(function (delResults) {
+            console.log("=======================")
+            console.log(delResults);
+            location.reload();
+
+        });
 
     })
 
-    $("#btnSaveNote").on("click", function(){
+
+    $("#btnSaveNote").on("click", function () {
         var jobInfo = {
             body: $("#modalNoteText").val()
         }
@@ -75,8 +113,9 @@ $(document).ready(function () {
         $.ajax("/saved/" + $(this).attr("data-id"), {
             type: "POST",
             data: jobInfo
-        }).then(function(){
-
+        }).then(function (result) {
+            console.log(result);
+            $("#modalNote").modal("hide")
         })
 
 

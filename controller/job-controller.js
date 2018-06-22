@@ -13,8 +13,8 @@ module.exports = function (app) {
             var hbsObj = {
                 Jobs: dbJob
             }
-            // console.log(dbJob);
             res.render("home", hbsObj);
+
         }).catch(function (err) {
             res.json(err);
         });
@@ -26,6 +26,7 @@ module.exports = function (app) {
                 Jobs: dbSavedJob
             }
             res.render("home", hbsObj);
+
         }).catch(function (err) {
             res.json(err);
         });
@@ -33,7 +34,6 @@ module.exports = function (app) {
 
     //Save funtion is not working.
     app.post("/", function (req, res) {
-       //console.log(req.body.id)
 
         db.Job.findOne({ _id: req.body.id }, function (err, found) {
             var jobObj = {
@@ -43,10 +43,11 @@ module.exports = function (app) {
                 company: found.company,
                 location: found.location
             };
-            console.log(jobObj);
+            // console.log(jobObj);
 
             db.SavedJob.create(jobObj).then(function (dbSavedJob) {
-                // console.log(dbSavedJob);
+                console.log(dbSavedJob);
+                res.json(dbSavedJob)
 
             }).catch(function (err) {
                 return res.json(err);
@@ -55,8 +56,18 @@ module.exports = function (app) {
         }).catch(function (err) {
             return res.json(err);
         })
-        res.json(req.body.id + " saved.");
     })
+
+    //Delete ALL from job listing (not including savedjob collection)
+    app.delete("/", function (req, res) {
+        db.Job.remove().then(function (result) {
+            console.log(result);
+            res.json(result);
+
+        }).catch(function (err) {
+            res.json(err);
+        });
+    });
 
     //Opening Add Note button.
     app.get("/saved/:id", function (req, res) {
@@ -64,21 +75,20 @@ module.exports = function (app) {
         db.SavedJob.findOne({ _id: req.params.id })
             .populate("note")
             .then(function (dbSavedJob) {
-            console.log("dbSavedJob",dbSavedJob);
-               res.json(dbSavedJob);
+                console.log("dbSavedJob", dbSavedJob);
+                res.json(dbSavedJob);
             })
             .catch(function (err) {
                 res.json(err);
             })
-
     })
 
     //Posting note to saved jobs
     app.post("/saved/:id", function (req, res) {
-       console.log("id", req.params.id);
-        db.Note.create({body: req.body.body})
+        // console.log("id", req.params.id);
+        db.Note.create({ body: req.body.body })
             .then(function (dbNote) {
-                console.log(dbNote)
+                // console.log(dbNote)
                 return db.SavedJob.findOneAndUpdate({
                     _id: req.params.id
                 }, {
@@ -94,14 +104,22 @@ module.exports = function (app) {
                 console.log(err);
                 res.json(err);
             });
-
-
-        // res.send("yay")
     })
 
     //Deleting the saved job.
-    app.delete("/saved/:id", function (req,res){
+    app.delete("/saved/:id", function (req, res) {
 
+        console.log(req.params.id);
+        db.SavedJob.deleteOne({
+            _id: req.params.id
+        })
+        .then(function(delResults){
+            console.log(delResults);
+            res.json(delResults);
+        }).catch(function(err){
+            console.log(err);
+            res.json(err);
+        })
     })
 
 
